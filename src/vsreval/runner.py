@@ -14,7 +14,7 @@ from .metrics import DEFAULT_METRICS, NEEDS_GT, create
 from .metrics.base import SampleData
 from .video import describe, find_samples
 
-PROTOCOL = "vsreval-v1"  # every input is converted to libx264 / yuv444p / lossless before any metric reads it
+PROTOCOL = "vsreval-v1-top-left"  # canonical inputs use a top-left crop when dimensions differ
 
 
 def _versions() -> dict[str, str]:

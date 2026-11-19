@@ -33,12 +33,12 @@ If the uv cache lives on a network drive (NFS), uv can read freshly written file
 (an empty `clip` module, for instance, breaks CLIP-IQA). Point `UV_CACHE_DIR` at a local disk.
 
 `--pred` / `--gt` are directories whose entries are video files (`.mp4 .mkv .avi .mov`) or directories of frames (`.png .jpg`), matched by
-name. If the sizes of prediction and ground truth differ, both are cropped to the common centre region.
+name. If the sizes of prediction and ground truth differ, both are cropped from the same top-left origin.
 
 Python: `vsreval.evaluate(pred, gt, metrics=None, out="vsreval_out", device="cuda")`.
 
 Output in `--out`: `<metric>.json` per metric (`per_sample`, `average`; skipped on the next run unless `--force`) and `results.json` with
-all metrics, the protocol name (`vsreval-v1`), the library versions, `inputs` and `warnings`. A metric file is reused only when it was
+all metrics, the protocol name (`vsreval-v1-top-left`), the library versions, `inputs` and `warnings`. A metric file is reused only when it was
 computed under the same protocol for the same set of samples; otherwise it is recomputed.
 
 ## One input format for every metric

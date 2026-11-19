@@ -86,16 +86,15 @@ def read_frames(path: Path) -> torch.Tensor:
 
 
 def align(pred: torch.Tensor, gt: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
-    """Common number of frames and, when the sizes differ, a common centre crop."""
+    """Common number of frames and dimensions, cropped from the top-left region.
+
+    Predictions made by diff-vsr are cropped from the top-left after upsampling, so the
+    corresponding ground-truth region must use the same origin.
+    """
     t = min(len(pred), len(gt))
     pred, gt = pred[:t], gt[:t]
     h, w = min(pred.shape[-2], gt.shape[-2]), min(pred.shape[-1], gt.shape[-1])
-
-    def crop(x: torch.Tensor) -> torch.Tensor:
-        top, left = (x.shape[-2] - h) // 2, (x.shape[-1] - w) // 2
-        return x[..., top:top + h, left:left + w]
-
-    return crop(pred), crop(gt)
+    return pred[..., :h, :w], gt[..., :h, :w]
 
 
 # ---------------------------------------------------------------------------------------------------------------------------------

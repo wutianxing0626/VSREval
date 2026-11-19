@@ -43,10 +43,12 @@ def test_find_samples_matches_ground_truth_by_name(tmp_path):
 def test_read_frames_and_align(tmp_path):
     _write_frames(tmp_path / "p", 5, 10, 12)
     _write_frames(tmp_path / "g", 4, 8, 12, seed=1)
-    pred, gt = read_frames(tmp_path / "p"), read_frames(tmp_path / "g")
-    assert pred.shape == (5, 3, 10, 12) and pred.dtype == torch.float32 and 0 <= pred.min() and pred.max() <= 1
-    pred, gt = align(pred, gt)
+    pred_raw, gt_raw = read_frames(tmp_path / "p"), read_frames(tmp_path / "g")
+    assert pred_raw.shape == (5, 3, 10, 12) and pred_raw.dtype == torch.float32 and 0 <= pred_raw.min() and pred_raw.max() <= 1
+    pred, gt = align(pred_raw, gt_raw)
     assert pred.shape == gt.shape == (4, 3, 8, 12)
+    assert torch.equal(pred, pred_raw[:4, :, :8, :])
+    assert torch.equal(gt, gt_raw[:4])
 
 
 def test_registry_is_consistent():
